@@ -1,8 +1,16 @@
 require 'scraperwiki'
 require 'horizon_xml'
+require 'mechanize'
 
+agent = Mechanize.new
+agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
+agent.ssl_version = false
+
+# DNS resoloved 'mycouncil.warrumbungle.nsw.gov.au' to two IP and
+# one of them is not working, hard code the working IP address
 collector = Horizon_xml.new
-collector.base_url    = 'https://mycouncil.warrumbungle.nsw.gov.au:6443/Horizon/'
+collector.agent       = agent
+collector.base_url    = 'https://220.233.114.12:6443/Horizon/'
 collector.domain      = 'horizondap'
 collector.comment_url = 'mailto:info@warrumbungle.nsw.gov.au'
 collector.period      = ENV['MORPH_PERIOD']
